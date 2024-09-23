@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UuidService } from '../services/uuid.service';
 import { SignalRService } from '../services/signal-r.service';
+import { Config } from "../services/config";
 
 @Component({
   selector: 'app-encoder',
@@ -9,14 +10,13 @@ import { SignalRService } from '../services/signal-r.service';
 })
 export class EncoderComponent implements OnInit, OnDestroy {
   public encodedText: string = '';
-  private hubUrl: string = 'https://localhost:5001/signalr/encodinghub';
   private operationId: string;
   public isEncoding: boolean = false; 
   constructor(private signalRService: SignalRService,
     private uuidService: UuidService) { }
 
   ngOnInit() {
-    this.signalRService.startConnection(this.hubUrl).then(() => {
+    this.signalRService.startConnection(this.encodinghubUri()).then(() => {
       this.signalRService.addListener('ReceiveChar', (character: string) => {
         this.encodedText += character;
       });
@@ -33,6 +33,10 @@ export class EncoderComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.signalRService.cancelEncoding(this.operationId);
     this.signalRService.stopConnection();
+  }
+
+  public encodinghubUri() {
+    return `${Config.api}/signalr/encodinghub`;
   }
 
   public sendToEncode(input: string): void {

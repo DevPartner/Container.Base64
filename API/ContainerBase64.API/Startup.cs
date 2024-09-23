@@ -18,6 +18,8 @@ namespace ContainerBase64
 
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddCors();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigins", builder =>
@@ -31,6 +33,7 @@ namespace ContainerBase64
                 });
             });
 
+            services.AddControllers();
             services.AddSignalR();
         }
 
@@ -41,15 +44,21 @@ namespace ContainerBase64
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("AllowAll");
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyHeader()
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod();
+            });
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapDefaultControllerRoute();
+
                 endpoints.MapHub<EncodingHub>("/signalr/encodinghub").RequireCors("AllowSpecificOrigins");
             });
-
         }
     }
 }
