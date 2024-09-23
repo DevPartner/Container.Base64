@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Base64ConverterSolution.Web.SignalRHub;
+using Base64ConverterSolution.Web.Services;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ContainerBase64
 {
@@ -22,6 +24,12 @@ namespace ContainerBase64
 
             services.AddCors(options =>
             {
+                options.AddPolicy("AllowAllOrigins", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
                 options.AddPolicy("AllowSpecificOrigins", builder =>
                 {
                     var allowedOrigins = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
@@ -35,6 +43,9 @@ namespace ContainerBase64
 
             services.AddControllers();
             services.AddSignalR();
+
+            services.AddSingleton<ITaskManager<ISingleClientProxy>, EncodingTaskManager>();
+            services.AddSingleton<IEncodingService, EncodingService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -44,12 +55,7 @@ namespace ContainerBase64
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(builder =>
-            {
-                builder.AllowAnyHeader()
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod();
-            });
+            app.UseCors("AllowAllOrigins");
 
             app.UseRouting();
 
@@ -57,7 +63,7 @@ namespace ContainerBase64
             {
                 endpoints.MapDefaultControllerRoute();
 
-                endpoints.MapHub<EncodingHub>("/signalr/encodinghub").RequireCors("AllowSpecificOrigins");
+                endpoints.MapHub<EncodingHub>("/signalr/encodinghub")/*.RequireCors("AllowSpecificOrigins")*/;
             });
         }
     }

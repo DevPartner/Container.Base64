@@ -27,4 +27,8 @@ WORKDIR /app
 
 COPY --from=publish /app/publish .
 RUN ls -l
+
+# Set the environment variable to listen on port 80
+ENV ASPNETCORE_URLS=http://+:80
+
 ENTRYPOINT [ "dotnet", "ContainerBase64.API.dll" ]
