@@ -1,4 +1,4 @@
-FROM node:lts-alpine as build
+FROM node as build
 WORKDIR /app
 
 RUN npm install -g @angular/cli

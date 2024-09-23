@@ -6,12 +6,12 @@ services:
     #     ports: 
     #         - "80:80"
     #     restart: always
-    # client:
-    #     build:
-    #         context: ./Client
-    #         dockerfile: Dockerfile
-    #     ports: 
-    #         - "9000:80"
+    client:
+        build:
+            context: ./Client
+            dockerfile: Dockerfile
+        ports: 
+            - "9000:80"
     api:
         build: 
             context: ./API
