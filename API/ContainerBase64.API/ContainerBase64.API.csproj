@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\ContainerBase64.Core\ContainerBase64.Core.csproj" />
+	  <ProjectReference Include="..\ContainerBase64.Infrastructure\ContainerBase64.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

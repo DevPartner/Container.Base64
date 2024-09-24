@@ -7,6 +7,7 @@ WORKDIR /src
 # copy all the layers' csproj files into respective folders
 COPY ["./ContainerBase64.Contracts/ContainerBase64.Contracts.csproj", "src/ContainerBase64.Contracts/"]
 COPY ["./ContainerBase64.Core/ContainerBase64.Core.csproj", "src/ContainerBase64.Core/"]
+COPY ["./ContainerBase64.Infrastructure/ContainerBase64.Infrastructure.csproj", "src/ContainerBase64.Infrastructure/"]
 COPY ["./ContainerBase64.API/ContainerBase64.API.csproj", "src/ContainerBase64.API/"]
 
 # run restore over API project - this pulls restore over the dependent projects as well

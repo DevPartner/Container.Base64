@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Base64ConverterSolution.Web.SignalRHub;
-using Base64ConverterSolution.Web.Services;
-using Microsoft.AspNetCore.SignalR;
+using ContainerBase64.API.SignalRHub;
+using ContainerBase64.API.Services;
+using ContainerBase64.Contracts.Services;
 
 namespace ContainerBase64
 {
@@ -43,9 +43,9 @@ namespace ContainerBase64
 
             services.AddControllers();
             services.AddSignalR();
-
-            services.AddSingleton<ITaskManager<ISingleClientProxy>, EncodingTaskManager>();
-            services.AddSingleton<IEncodingService, EncodingService>();
+            services.AddApplicationServices();
+            services.AddInfrastructureServices();
+            services.AddScoped<IEncodingClientProxy, SignalRClientProxy>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

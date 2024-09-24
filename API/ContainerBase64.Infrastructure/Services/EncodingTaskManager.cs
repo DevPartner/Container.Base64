@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
+﻿using System.Collections.Concurrent;
+using ContainerBase64.Contracts.Services;
 
-namespace Base64ConverterSolution.Web.Services;
+namespace ContainerBase64.Infrastructure.Services;
 
-public class EncodingTaskManager : ITaskManager<ISingleClientProxy>
+public class EncodingTaskManager : ITaskManager<IEncodingClientProxy>
 {
     private readonly ConcurrentDictionary<string, (Task EncodingTask, CancellationTokenSource CancellationTokenSource)> _encodingTasks = new();
 
     // Add a new encoding task
-    public async Task AddEncodingTask(string key, ISingleClientProxy client, Func<ISingleClientProxy, Task> encodingTaskFunc)
+    public async Task AddEncodingTask(string key, IEncodingClientProxy client, Func<IEncodingClientProxy, Task> encodingTaskFunc)
     {
         var cancellationTokenSource = new CancellationTokenSource();
 
