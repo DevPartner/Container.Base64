@@ -37,7 +37,7 @@ export class SignalRService {
     const customHttpClient = new CustomHttpClient(defaultHttpClient, token);
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .configureLogging(signalR.LogLevel.Trace)
+      //.configureLogging(signalR.LogLevel.Trace)
       .withUrl(url, {
         withCredentials: true,
         httpClient: customHttpClient,
