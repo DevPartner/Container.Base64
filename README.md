@@ -46,8 +46,7 @@ Password: ki
   - The use of SignalR to stream each character asynchronously to the client.
   
 - [x] **Unit Testing**:
-  - Unit tests implemented for backend logic using xUnit.
-  - Frontend unit tests for Angular components with Jasmine/Karma.
+  - Unit tests implemented for backend logic using NUnit.
   
 - [x] **Industry Best Practices**:
   - **Dependency Injection**: Leverage default IoC in .NET for handling service dependencies.
