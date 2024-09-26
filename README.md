@@ -2,56 +2,26 @@
 
 ## Project Overview
 
-A simple Single Page Application (SPA) with .NET 8 backend and Angular frontend to encode user input into Base64, simulating a long-running job. The encoding is performed character by character with random pauses on the backend (1-5 seconds per character) and streamed back to the client in real-time. The client receives and displays each character in a text box in real-time. The user can cancel the encoding process if required.
+A simple SPA with a .NET 8 backend and Angular frontend to encode user input to Base64 in real-time. Encoding is done character by character with random delays (1-5 seconds). The client receives and displays each character as it's processed, and users can cancel the operation at any time.
+
 
 ## Core Features
-- **SPA (Single Page Application)**: Angular frontend that interacts with a .NET 8 API backend for encoding text to Base64.
-- **Backend (API)**: ASP.NET Core 8 for encoding the input string to Base64, sent one character at a time with random delays (1-5 seconds).
-- **Real-Time Updates**: UI dynamically updates as the API returns one encoded character at a time.
-- **Cancelable Operations**: The user can cancel the encoding process if it’s in progress.
-- **Dockerized Setup**: Each component (frontend, backend, Nginx) runs in separate Docker containers.
-- **Nginx for Basic Authentication**: Nginx container is used as a reverse proxy to handle basic authentication.
+- **Angular SPA**: Frontend interacting with a .NET 8 API for Base64 encoding.
+- **Backend API**: Encodes text with random delays, streamed to the frontend in real-time.
+- **Real-Time Updates**: UI shows each encoded character as it’s received.
+- **Cancelable**: Users can cancel the encoding process.
+- **Dockerized Setup**: Frontend, backend, and Nginx run in Docker containers.
+- **Basic Auth**: Nginx handles authentication as a reverse proxy.
 
 ---
 
 ## Key Implementation Details
 
-- [x] **Clean Architecture**:
-  - **Separated layers for API, Core, Contracts, Infrastructure** to adhere to SOLID principles.
-  - Clear distinction between application logic and domain logic for maintainability and scalability.
-
-- [x] **Backend in .NET 8**:
-  - **API Endpoints** for accepting text input and returning Base64 encoded characters.
-  - **Asynchronous Task Management** to simulate heavy processing with random delays for each character.
-  - **Cancellation Tokens** used to gracefully handle cancellation requests.
-  - **Error Handling & Resilience**: Handles multiple users and misuse scenarios, ensuring system resilience under load.
-
-- [x] **Frontend in Angular**:
-  - **User Input Form** with real-time feedback as each character is encoded.
-  - **SignalR Streaming** to handle character-by-character updates from the backend.
-  - **Responsive UI** with Bootstrap to ensure neat and clean design.
-
-- [x] **Docker Configuration**:
-  - **Dockerfiles** for each component (API, Angular, Nginx) to streamline containerization.
-  - **Docker Compose** for running all services (frontend, backend, Nginx) in separate containers.
-
-
-- [x] **Basic Authentication via Nginx**:
-  - Nginx container serves as a reverse proxy and manages authentication, restricting access to the backend API.
-  - Example credentials for testing:
-Login: ki
-Password: ki
-
-- [x] **Real-Time Streaming via SignalR (Optional Bonus)**:
-  - The use of SignalR to stream each character asynchronously to the client.
-  
-- [x] **Unit Testing**:
-  - Unit tests implemented for backend logic using NUnit.
-  
-- [x] **Industry Best Practices**:
-  - **Dependency Injection**: Leverage default IoC in .NET for handling service dependencies.
-  - **Logging via ILogger** for tracking encoding requests, errors, and cancellation.
-
+- **Clean Architecture**: Separated API, Core, and Infrastructure layers.
+- **Async Task Handling**: Backend simulates long processing with random delays.
+- **SignalR Streaming**: (Optional) Real-time updates via SignalR.
+- **Unit Testing**: Backend tested using NUnit.
+- **Best Practices**: Dependency Injection, ILogger for logging, and Docker for containerization.
 
 ---
 
