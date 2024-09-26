@@ -45,7 +45,6 @@ namespace ContainerBase64
             services.AddSignalR();
             services.AddApplicationServices();
             services.AddInfrastructureServices();
-            services.AddScoped<IEncodingClientProxy, SignalRClientProxy>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

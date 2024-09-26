@@ -1,8 +1,0 @@
-<div>
-  <h1>Text Encoder</h1>
-  <input #textInput type="text" placeholder="Enter text to encode">
-  <button (click)="sendToEncode(textInput.value)" [disabled]="isEncoding">Encode Text</button>
-  <button (click)="cancelEncoding()" [disabled]="!isEncoding">Cancel Encoding</button>
-
-  <p>Encoded Text: <strong>{{ encodedText }}</strong></p>
-</div>

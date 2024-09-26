@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UuidService } from '../services/uuid.service';
-import { SignalRService } from '../services/signal-r.service';
-import { Config } from "../services/config";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { UuidService } from './uuid.service';
+import { SignalRService } from '../../core/services/signal-r.service';
+import { TokenService } from '../../core/services/token.service';
 
 @Component({
   selector: 'app-encoder',
@@ -9,14 +11,24 @@ import { Config } from "../services/config";
   styleUrls: ['./encoder.component.css']
 })
 export class EncoderComponent implements OnInit, OnDestroy {
+  public encodeForm: FormGroup;
   public encodedText: string = '';
   private operationId: string;
   public isEncoding: boolean = false; 
-  constructor(private signalRService: SignalRService,
-    private uuidService: UuidService) { }
+  constructor(
+    private fb: FormBuilder,
+    private signalRService: SignalRService,
+    private tokenService: TokenService,
+    private uuidService: UuidService)
+    {
+      this.encodeForm = this.fb.group({
+        textInput: ['', Validators.required]
+      });
+    }
 
   ngOnInit() {
-    this.signalRService.startConnection(this.encodinghubUri()).then(() => {
+    var token = this.tokenService.getToken();
+    this.signalRService.startConnection(token).then(() => {
       this.signalRService.addListener('ReceiveChar', (character: string) => {
         this.encodedText += character;
       });
@@ -35,8 +47,14 @@ export class EncoderComponent implements OnInit, OnDestroy {
     this.signalRService.stopConnection();
   }
 
-  public encodinghubUri() {
-    return `${Config.api}/signalr/encodinghub`;
+  public onSubmit(): void {
+    if (this.encodeForm.valid) {
+      this.sendToEncode(this.encodeForm.value.textInput);
+    }
+  }
+
+  get textInput() {
+    return this.encodeForm.get('textInput');
   }
 
   public sendToEncode(input: string): void {
