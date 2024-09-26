@@ -16,10 +16,8 @@
       <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
            [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
-          <li class="nav-item"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+          <li *ngIf="tokenService.IsAuthenticated" class="nav-item">
+            <a class="nav-link" href="javascript:void(0)" (click)="logout()">Logout</a>
           </li>
         </ul>
       </div>

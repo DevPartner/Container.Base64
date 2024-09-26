@@ -45,7 +45,6 @@ namespace ContainerBase64
             services.AddSignalR();
             services.AddApplicationServices();
             services.AddInfrastructureServices();
-            services.AddScoped<IEncodingClientProxy, SignalRClientProxy>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -55,15 +54,15 @@ namespace ContainerBase64
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("AllowAllOrigins");
-
             app.UseRouting();
+
+            app.UseCors("AllowSpecificOrigins");
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
 
-                endpoints.MapHub<EncodingHub>("/signalr/encodinghub")/*.RequireCors("AllowSpecificOrigins")*/;
+                endpoints.MapHub<EncodingHub>("/signalr/encodinghub");
             });
         }
     }
