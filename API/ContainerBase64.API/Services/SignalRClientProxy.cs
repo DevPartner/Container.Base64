@@ -1,7 +1,5 @@
 ﻿using ContainerBase64.Contracts.Services;
 using Microsoft.AspNetCore.SignalR;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ContainerBase64.API.Services;
 public class SignalRClientProxy : IEncodingClientProxy

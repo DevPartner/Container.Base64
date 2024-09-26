@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
 using ContainerBase64.Contracts.Services;
 using ContainerBase64.API.Services;
 using ContainerBase64.Core.Handlers.Commands;
@@ -34,6 +33,10 @@ public class EncodingHub : Hub
     public async Task CancelEncoding(string operationId)
     {
         var key = Context.ConnectionId + operationId;
-        await _taskManager.CancelEncodingTask(key);
+        var command = new CancelEncodingCommand
+        {
+            Key = key
+        };
+        await _mediator.Send(command);
     }
 }
