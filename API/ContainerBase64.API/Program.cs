@@ -1,10 +1,4 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ContainerBase64
+/*namespace ContainerBase64
 {
     public class Program
     {
@@ -24,4 +18,43 @@ namespace ContainerBase64
                     webBuilder.UseStartup<Startup>();
                 });
     }
+}*/
+
+using ContainerBase64.API.SignalRHub;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add builder.Services to the container.
+
+builder.Services.AddWebServices(builder.Configuration);
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices();
+
+var app = builder.Build();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+
+app.UseCors("AllowSpecificOrigins");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapDefaultControllerRoute();
+
+    endpoints.MapHub<EncodingHub>("/signalr/encodinghub");
+}); 
+
+app.Run();
+
