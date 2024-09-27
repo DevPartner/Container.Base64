@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthToken } from '../models/AuthToken';
 import { LoginDTO } from '../models/LoginDTO';
@@ -11,7 +10,7 @@ import { from, Observable, of, catchError, throwError, switchMap } from 'rxjs';
 })
 
 export class AuthService {
-  constructor(private http: HttpClient, private tokenService: TokenService, private signalRService: SignalRService) { }
+  constructor(private tokenService: TokenService, private signalRService: SignalRService) { }
 
   login(loginDto: LoginDTO): Observable<AuthToken> {
     const accessToken = 'Basic ' + btoa(`${loginDto.username}:${loginDto.password}`);

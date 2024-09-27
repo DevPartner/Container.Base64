@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UuidService } from '../../core/utilities/uuid.service';
+import { UuidService } from './uuid.service';
 
 describe('UuidService', () => {
   let service: UuidService;
