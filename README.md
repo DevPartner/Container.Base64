@@ -1,4 +1,4 @@
-# Base64 Encoding SPA - Task Description
+# Base64 Encoding SPA
 
 ## Project Overview
 
