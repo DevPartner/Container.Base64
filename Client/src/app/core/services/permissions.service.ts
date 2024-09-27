@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { TokenService } from './token.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,10 +8,10 @@ import { TokenService } from './token.service';
 
 export class PermissionsService {
 
-  constructor(private router: Router, private tokenService: TokenService) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   canActivate(): boolean {
-    const isAuthenticated = this.tokenService.IsAuthenticated;
+    const isAuthenticated = this.authService.isAuthenticated;
 
     if (!isAuthenticated) {
       this.router.navigate(['/login']);

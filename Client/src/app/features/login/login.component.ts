@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-
 import { Router } from '@angular/router';
-import { LoginDTO } from '../../core/models/LoginDTO';
+import { catchError, of } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
-import { TokenService } from '../../core/services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -12,42 +9,30 @@ import { TokenService } from '../../core/services/token.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  form: FormGroup;
-  isError: boolean = false;
-  errMsg: string = "Some error has occured!";
+  public connectionFailed: boolean = false;
+  public message: string | null = null;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private tokenService: TokenService
-  ) {
-    this.form = this.formBuilder.group({
-      username: new FormControl([], [Validators.required]),
-      password: new FormControl([], [Validators.required])
-    })
-  }
+  constructor(private authService: AuthService, private router: Router) { }
 
-  ngOnInit(): void { 
-    // clear off any tokens in cache
-    // if user lands on login
-    this.tokenService.clearToken();
-  }
-
-
-  login() {
-    console.log(this.form.value);
-    this.authService.login(<LoginDTO>this.form.value).subscribe({
-      next: (response) => {
-        this.router.navigate(['encoder']);
-      },
-      error: (err) => {
-        if (err.status === 401) {
-          this.form.reset();
-          this.errMsg = "Authentication Failed!";
+  ngOnInit() {
+    this.authService.login().pipe(
+      catchError((error) => {
+        console.error('Login failed:', error);
+        this.connectionFailed = true;
+        this.message = 'An error occurred. Please try again later.'; 
+        return of(null);  // Return null on error
+      }))
+      .subscribe(result => {
+        if (result && result.status === 'ok') { // Check if the login was successful.
+          this.router.navigate(['encoder']);
+        } else if (result && result.status === 'error') {
+          this.connectionFailed = true; // Mark as failed
+          this.message = result.message; // Set the error message
         }
-        this.isError = true;
-      }
-    });
+      });
+  }
+
+  refreshPage() {
+    location.reload();
   }
 }

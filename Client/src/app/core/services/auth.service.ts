@@ -1,39 +1,60 @@
 import { Injectable } from '@angular/core';
-import { AuthToken } from '../models/AuthToken';
-import { LoginDTO } from '../models/LoginDTO';
-import { TokenService } from './token.service';
-import { SignalRService } from './signal-r.service';
-import { from, Observable, of, catchError, throwError, switchMap } from 'rxjs';
+import { Config } from "./config";
+import { Observable, of, catchError } from 'rxjs';
+
+interface AuthResponse {
+  status: 'ok' | 'error';
+  message: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class AuthService {
-  constructor(private tokenService: TokenService, private signalRService: SignalRService) { }
 
-  login(loginDto: LoginDTO): Observable<AuthToken> {
-    const accessToken = 'Basic ' + btoa(`${loginDto.username}:${loginDto.password}`);
-
-    const authToken: AuthToken = {
-      accessToken: accessToken,
-      expiresIn: this.setExpiresIn(3600) // Set expiresIn to 1 hour (3600 seconds)
-    };
-
-    return from(this.signalRService.startConnection(accessToken)).pipe(
-      switchMap(() => {
-        this.signalRService.stopConnection();
-        this.tokenService.setToken(authToken);
-        return of(authToken);
-      }),
-      catchError((error) => {
-        console.error('Login or SignalR connection failed:', error);
-        return throwError(() => new Error('Login failed.'));
+  login(): Observable<AuthResponse> {
+    return new Observable<AuthResponse>(observer => {
+      fetch(`${Config.api}/api/health`, {
+        method: 'GET',
       })
-    );
+        .then(response => {
+          if (response.ok) {
+            const successMessage = 'Authentication successful!';
+            console.log(successMessage);
+            this.updateConnectionStatus('ok', successMessage);
+            observer.next({ status: 'ok', message: successMessage });
+          } else if (response.status === 401) {
+            const errorMessage = 'Authentication failed. Incorrect login.';
+            this.updateConnectionStatus('error', errorMessage);
+            observer.next({ status: 'error', message: errorMessage });
+          } else {
+            const unexpectedMessage = 'Unexpected response from server.';
+            console.error(unexpectedMessage);
+            this.updateConnectionStatus('error', unexpectedMessage);
+            observer.next({ status: 'error', message: unexpectedMessage });
+          }
+          observer.complete(); // Indicate that the observable is complete
+        })
+        .catch(error => {
+          const networkErrorMessage = 'Network error occurred.';
+          console.error(networkErrorMessage, error);
+          this.updateConnectionStatus('error', networkErrorMessage);
+          observer.next({ status: 'error', message: networkErrorMessage });
+          observer.complete(); // Indicate that the observable is complete
+        });
+    });
   }
 
-  private setExpiresIn(seconds: number): number {
-    return Date.now() + seconds * 1000;
+  private updateConnectionStatus(status: 'ok' | 'error', message: string): void {
+    localStorage.setItem('connectionStatus', JSON.stringify({ status, message }));
+  }
+
+  isAuthenticated(): boolean {
+    const connectionStatus = localStorage.getItem('connectionStatus');
+    if (connectionStatus) {
+      const parsedStatus = JSON.parse(connectionStatus);
+      return parsedStatus.status === 'ok';
+    }
+    return false; // Default to false if no connection status is found
   }
 }

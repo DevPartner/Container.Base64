@@ -1,40 +1,4 @@
-<div class="row">
-  <div class="col-md-4 mx-auto rounded p-md-4">
-    <ng-container *ngIf="isError">
-      <div class="alert alert-danger" role="alert">
-        {{ errMsg }}
-      </div>
-    </ng-container>
-    <form (ngSubmit)="login()" [formGroup]="form">
-      <div class="card">
-        <div class="card-body">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input id="username"
-                   formControlName="username"
-                   class="form-control"
-                   placeholder="Enter your username"
-                   type="text" />
-            <div *ngIf="form.get('username').invalid && (form.get('username').dirty || form.get('username').touched)" class="text-danger">
-              <small *ngIf="form.get('username').errors?.required">Username is required.</small>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input id="password"
-                   formControlName="password"
-                   class="form-control"
-                   placeholder="******"
-                   type="password" />
-            <div *ngIf="form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)" class="text-danger">
-              <small *ngIf="form.get('password').errors?.required">Password is required.</small>
-            </div>
-          </div>
-
-          <button [disabled]="!form.valid" type="submit" class="btn bg-dark text-light mt-3">Login</button>
-        </div>
-      </div>
-    </form>
-  </div>
+<div *ngIf="connectionFailed" class="alert alert-danger">
+  Connection wasn't established. Please click
+  <a href="javascript:void(0);" (click)="refreshPage()">here</a> to refresh the page and try logging in again.
 </div>

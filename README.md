@@ -21,13 +21,16 @@ A simple SPA with a .NET 8 backend and Angular frontend to encode user input to 
 - **Async Task Handling**: Backend simulates long processing with random delays.
 - **SignalR Streaming**: (Optional) Real-time updates via SignalR.
 - **Unit Testing**: Backend tested using NUnit.
+- **Unit Testing**: 
+  - **Frontend**: Angular components and services tested using Karma and Jasmine for unit tests.
+  - **Backend**: NUnit.
 - **Best Practices**: Dependency Injection, ILogger for logging, and Docker for containerization.
 
 ---
 
 ## Technical Stack
 - **Frontend**: Angular 16 with Bootstrap 5 for UI design and real-time updates.
-- **Backend**: .NET 8 Web API.
+- **Backend**: .NET 8 Web API, SignalR, MediatR.
 - **Containerization**: Docker for all services with Docker Compose for orchestration.
 - **Nginx**: For reverse proxy and basic authentication.
 
