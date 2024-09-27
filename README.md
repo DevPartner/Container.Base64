@@ -19,8 +19,7 @@ A simple SPA with a .NET 8 backend and Angular frontend to encode user input to 
 
 - **Clean Architecture**: Separated API, Core, and Infrastructure layers.
 - **Async Task Handling**: Backend simulates long processing with random delays.
-- **SignalR Streaming**: (Optional) Real-time updates via SignalR.
-- **Unit Testing**: Backend tested using NUnit.
+- **SignalR Streaming**: Real-time updates via SignalR.
 - **Unit Testing**: 
   - **Frontend**: Angular components and services tested using Karma and Jasmine for unit tests.
   - **Backend**: NUnit.
