@@ -53,5 +53,4 @@ User: ki; Password: ki
 ```
 
 # Future Enhancements
-- Implement alternative JWT authorization methods to support advanced authentication scenarios.
 - Integrate distributed caching to further optimize.
